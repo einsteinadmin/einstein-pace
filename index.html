@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E=MCash² — Einstein PACe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #EF8B22;
+    --dark: #1a1a1a;
+    --gray-1: #fafafa;
+    --gray-2: #e5e5e5;
+    --gray-3: #888;
+    --green: #28a745;
+    --yellow: #f0b400;
+    --red: #dc3545;
+    --indigo: #5a4fcf;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--gray-1);
+    color: var(--dark);
+    line-height: 1.4;
+    padding: 24px;
+  }
+  h1, h2, h3, .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    max-width: 1500px;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 4px solid var(--orange);
+    padding-bottom: 14px;
+  }
+  .hero-left { display: flex; flex-direction: column; gap: 2px; }
+  .hero-eyebrow {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 4px;
+    font-size: 12px;
+    color: var(--orange);
+    text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    letter-spacing: 1px;
+    line-height: 0.95;
+    color: var(--dark);
+  }
+  .hero-title sup {
+    font-size: 0.5em;
+    vertical-align: super;
+    letter-spacing: 0;
+    color: var(--orange);
+  }
+  .hero-sub { font-size: 13px; color: var(--gray-3); margin-top: 4px; }
+  .hero-right { display: flex; align-items: flex-end; }
+  .who-tag {
+    background: var(--orange);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    padding: 6px 16px;
+    letter-spacing: 2px;
+    outline: none;
+  }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar {
+    max-width: 1500px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  button.tool {
+    background: white;
+    border: 1px solid var(--gray-2);
+    padding: 7px 14px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  button.tool:hover { background: var(--orange); color: white; border-color: var(--orange); }
+  button.tool.primary { background: var(--orange); color: white; border-color: var(--orange); }
+  button.tool.primary:hover { background: var(--dark); border-color: var(--dark); }
+  .toolbar .status {
+    font-size: 12px;
+    color: var(--gray-3);
+    margin-left: auto;
+    font-style: italic;
+  }
+
+  /* ---------- QUARTER META ---------- */
+  .quarter-meta {
+    max-width: 1500px;
+    margin: 0 auto 12px;
+    background: white;
+    border: 1px solid var(--gray-2);
+    border-radius: 6px;
+    padding: 10px 18px;
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .qm-cell { display: flex; flex-direction: column; gap: 2px; }
+  .qm-spacer { flex: 1; }
+  .qm-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gray-3);
+    text-transform: uppercase;
+  }
+  .qm-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    outline: none;
+  }
+  .qm-value:focus { background: #fffbe6; border-radius: 2px; }
+
+  /* ---------- LEGEND ---------- */
+  .legend {
+    max-width: 1500px;
+    margin: 0 auto 12px;
+    display: flex;
+    gap: 14px;
+    font-size: 12px;
+    color: var(--gray-3);
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .legend .swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  /* ---------- PACE BOARD ---------- */
+  .pace-board {
+    max-width: 1500px;
+    margin: 0 auto;
+    background: white;
+    border: 1px solid var(--gray-2);
+    border-radius: 8px;
+    padding: 24px;
+  }
+  .board-title { text-align: center; margin-bottom: 18px; }
+  .board-title h2 { font-size: 26px; }
+  .board-title .source { font-size: 11px; color: var(--gray-3); margin-top: 2px; }
+
+  .loop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr 1fr;
+    gap: 18px;
+  }
+  .col-left, .col-right { display: flex; flex-direction: column; gap: 14px; }
+  .col-center { display: flex; flex-direction: column; gap: 12px; }
+
+  /* ---------- PROCESS BOX ---------- */
+  .pbox {
+    border: 2px solid var(--gray-2);
+    border-radius: 6px;
+    padding: 12px 12px 10px;
+    background: white;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    min-height: 120px;
+  }
+  .pbox:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .pbox .num {
+    position: absolute;
+    top: -12px;
+    left: 12px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--dark);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pbox .name {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.25;
+    margin-top: 4px;
+    outline: none;
+  }
+  .pbox .name:focus, .pbox .who:focus, .pbox .kpis:focus,
+  .ideas:focus, .qa-body:focus, .who-tag:focus, .ns-body:focus {
+    background: #fffbe6;
+    border-radius: 2px;
+  }
+  .pbox .who {
+    font-size: 12px;
+    color: var(--dark);
+    border-top: 1px solid var(--gray-2);
+    padding-top: 6px;
+    outline: none;
+    font-weight: 500;
+  }
+  .pbox .who::before {
+    content: 'WHO: ';
+    font-size: 10px;
+    color: var(--gray-3);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .pbox .kpis {
+    font-size: 11px;
+    color: var(--dark);
+    line-height: 1.4;
+    outline: none;
+  }
+  .pbox .kpis::before {
+    content: 'KPIs: ';
+    font-size: 10px;
+    color: var(--gray-3);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .pbox .color-dot {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px var(--gray-2);
+    background: #ccc;
+    transition: transform 0.1s;
+  }
+  .pbox .color-dot:hover { transform: scale(1.15); }
+  .pbox.green .color-dot { background: var(--green); }
+  .pbox.yellow .color-dot { background: var(--yellow); }
+  .pbox.red .color-dot { background: var(--red); }
+  .pbox.green { border-left: 6px solid var(--green); }
+  .pbox.yellow { border-left: 6px solid var(--yellow); }
+  .pbox.red { border-left: 6px solid var(--red); }
+  .pbox.gray { border-left: 6px solid #ccc; }
+  .pbox .close-tag {
+    position: absolute;
+    bottom: -8px;
+    right: 10px;
+    background: var(--orange);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11px;
+    padding: 2px 8px;
+    letter-spacing: 1px;
+    border-radius: 3px;
+  }
+
+  /* ---------- NEXT STEPS PANEL ---------- */
+  .next-steps {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed var(--gray-2);
+  }
+  .next-steps summary {
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--orange);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 3px 0;
+    list-style: none;
+    user-select: none;
+    text-transform: uppercase;
+  }
+  .next-steps summary::-webkit-details-marker { display: none; }
+  .next-steps summary::before {
+    content: '＋ ';
+    display: inline-block;
+    margin-right: 2px;
+  }
+  .next-steps[open] summary::before { content: '－ '; }
+  .next-steps[open] summary { color: var(--dark); }
+  .ns-body {
+    font-size: 11.5px;
+    line-height: 1.5;
+    outline: none;
+    padding: 8px 4px 4px;
+    min-height: 32px;
+    color: var(--dark);
+  }
+  .ns-body:empty::before {
+    content: 'No next steps yet — click here to add';
+    color: var(--gray-3);
+    font-style: italic;
+  }
+  .ns-body p { margin-bottom: 5px; }
+  .ns-body ul { margin: 2px 0 6px 16px; padding: 0; }
+  .ns-body li { margin-bottom: 2px; }
+  .ns-body .ns-section {
+    font-weight: 700;
+    color: var(--dark);
+    margin: 6px 0 2px;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .qg-tag {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    margin-right: 4px;
+    vertical-align: 1px;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* ---------- MARKER + IMPROVEMENT (CENTER COL) ---------- */
+  .marker {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 8px;
+    border-radius: 4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  .improvement {
+    border: 2px solid var(--orange);
+    border-radius: 6px;
+    padding: 0;
+    background: #fff8ee;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .improvement h3 {
+    background: var(--orange);
+    color: white;
+    padding: 8px 10px;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 2px;
+  }
+  .improvement .sub {
+    font-size: 10px;
+    color: var(--gray-3);
+    text-align: center;
+    padding: 6px 10px 0;
+    font-style: italic;
+  }
+  .improvement .ideas {
+    flex: 1;
+    outline: none;
+    font-size: 12px;
+    line-height: 1.6;
+    min-height: 180px;
+    padding: 10px 12px;
+  }
+  .improvement .ideas:empty::before {
+    content: 'Cross-cutting ideas that span multiple boxes — or a parking lot for things still being placed.';
+    color: var(--gray-3);
+    font-style: italic;
+  }
+  .center-bottom-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* ---------- LAYERS ---------- */
+  .layer-strip {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    border: 2px solid var(--gray-2);
+    border-radius: 6px;
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .layer-strip .layer-rail {
+    background: var(--dark);
+    color: white;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .layer-strip .layer-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+  .layer-strip .layer-tag {
+    font-size: 11px;
+    color: var(--orange);
+    margin-top: 2px;
+    letter-spacing: 1px;
+  }
+  .layer-strip .layer-content {
+    padding: 12px 48px 12px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+  .layer-strip .name {
+    font-weight: 700;
+    font-size: 15px;
+    outline: none;
+    line-height: 1.25;
+  }
+  .layer-strip .meta {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .layer-strip .who, .layer-strip .kpis { outline: none; font-weight: 500; }
+  .layer-strip .who::before {
+    content: 'WHO: ';
+    color: var(--gray-3);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-right: 2px;
+  }
+  .layer-strip .kpis::before {
+    content: 'KPIs: ';
+    color: var(--gray-3);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-right: 2px;
+  }
+  .layer-strip .name:focus,
+  .layer-strip .who:focus,
+  .layer-strip .kpis:focus { background: #fffbe6; border-radius: 2px; }
+  .layer-strip .color-dot {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 0 1px var(--gray-2);
+    background: #ccc;
+    transition: transform 0.1s;
+  }
+  .layer-strip .color-dot:hover { transform: scale(1.15); }
+  .layer-strip.green .color-dot { background: var(--green); }
+  .layer-strip.yellow .color-dot { background: var(--yellow); }
+  .layer-strip.red .color-dot { background: var(--red); }
+  .layer-strip.green { border-left: 8px solid var(--green); }
+  .layer-strip.yellow { border-left: 8px solid var(--yellow); }
+  .layer-strip.red { border-left: 8px solid var(--red); }
+  .layer-strip.gray { border-left: 8px solid #ccc; }
+  .layer-arrow {
+    text-align: center;
+    font-size: 22px;
+    color: var(--orange);
+    margin: 6px 0;
+    line-height: 1;
+    font-weight: 700;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+  }
+  .layer-arrow .label {
+    font-size: 11px;
+    color: var(--gray-3);
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ---------- QUARTER ANALYSIS CARD ---------- */
+  .quarter-analysis-card {
+    max-width: 1500px;
+    margin: 24px auto 0;
+    background: white;
+    border: 1px solid var(--gray-2);
+    border-left: 4px solid var(--orange);
+    border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .quarter-analysis-card .qa-eyebrow {
+    font-size: 11px;
+    color: var(--gray-3);
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+  .qa-badge {
+    display: inline-block;
+    background: var(--dark);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: 2px;
+    font-style: normal;
+  }
+  .quarter-analysis-card h3 { font-size: 22px; margin-bottom: 10px; }
+  .qa-body {
+    outline: none;
+    font-size: 13px;
+    line-height: 1.65;
+    min-height: 120px;
+  }
+  .qa-body:empty::before {
+    content: 'Capture this quarter\'s reflection here — what was Red/Yellow/Green and why, what shifted, what to watch next quarter.';
+    color: var(--gray-3);
+    font-style: italic;
+  }
+  .qa-body p { margin-bottom: 10px; }
+  .qa-body ul { margin: 4px 0 10px 22px; }
+  .qa-body li { margin-bottom: 4px; }
+
+  /* ---------- ROB DISCUSSION CARD ---------- */
+  .rob-card {
+    max-width: 1500px;
+    margin: 16px auto 0;
+    background: white;
+    border: 1px solid var(--gray-2);
+    border-left: 4px solid var(--indigo);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .rob-card h3 { font-size: 18px; margin-bottom: 4px; }
+  .rob-card .badge {
+    display: inline-block;
+    background: var(--indigo);
+    color: white;
+    font-size: 11px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: 3px;
+  }
+  .rob-card .sub { font-size: 11px; color: var(--gray-3); margin-bottom: 10px; font-style: italic; }
+  .rob-card-body {
+    outline: none;
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 100px;
+  }
+  .rob-card-body p { margin-bottom: 8px; }
+  .rob-card-body ul { margin: 4px 0 8px 22px; }
+  .rob-card-body li { margin-bottom: 3px; }
+
+  /* ---------- PRINT ---------- */
+  @media print {
+    body { padding: 0; background: white; }
+    .toolbar, .legend, button { display: none; }
+    .pace-board, .quarter-analysis-card, .rob-card, .quarter-meta { box-shadow: none; border-color: #ccc; }
+    .pbox, .layer-strip { break-inside: avoid; page-break-inside: avoid; }
+    details > *:not(summary) { display: block !important; }
+    details summary { color: var(--orange) !important; }
+    .next-steps summary::before { content: '' !important; }
+    .ns-body:empty { display: none !important; }
+  }
+
+  @media (max-width: 1000px) {
+    .loop-grid { grid-template-columns: 1fr; }
+    .center-bottom-pair { grid-template-columns: 1fr; }
+    .hero-title { font-size: 44px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Process Accountability Chart</div>
+    <h1 class="hero-title">E=MCash<sup>2</sup></h1>
+    <div class="hero-sub">Einstein Moving Co.'s Key Process to Making Money</div>
+  </div>
+  <div class="hero-right">
+    <div class="who-tag" contenteditable="true" data-id="who-tag">CAMERON</div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <button class="tool primary" id="saveFileBtn" onclick="saveToFileLink()">💾 Save to File…</button>
+  <button class="tool" onclick="openFromFile()">📂 Open from File…</button>
+  <button class="tool" id="reconnectBtn" onclick="reconnectFile()" style="display:none">📎 Reconnect</button>
+  <button class="tool" id="unlinkBtn" onclick="unlinkFile()" style="display:none">🔗 Unlink</button>
+  <button class="tool" onclick="copyMarkdown()">Copy as Markdown</button>
+  <button class="tool" onclick="window.print()">Print / Save PDF</button>
+  <button class="tool" onclick="resetAll()">Reset Defaults</button>
+  <span class="status" id="saveStatus">Browser backup only — click "Save to File" to link</span>
+</div>
+
+<div class="quarter-meta">
+  <div class="qm-cell">
+    <div class="qm-label">Quarter</div>
+    <div class="qm-value" contenteditable="true" data-id="quarter">Q1 2026</div>
+  </div>
+  <div class="qm-cell">
+    <div class="qm-label">Last Updated</div>
+    <div class="qm-value" id="lastUpdated">—</div>
+  </div>
+  <div class="qm-cell">
+    <div class="qm-label">Color Counts</div>
+    <div class="qm-value" id="colorCounts">…</div>
+  </div>
+  <div class="qm-spacer"></div>
+  <div class="qm-cell">
+    <div class="qm-label">Source</div>
+    <div class="qm-value" style="font-weight: 500;">OPSP Process Accountability Chart</div>
+  </div>
+</div>
+
+<div class="legend">
+  <span><span class="swatch" style="background: var(--green);"></span>Green — performing</span>
+  <span><span class="swatch" style="background: var(--yellow);"></span>Yellow — soft / volatile</span>
+  <span><span class="swatch" style="background: var(--red);"></span>Red — broken / blocking</span>
+  <span style="margin-left: auto;">Click any colored dot to cycle G → Y → R · Click any text to edit · Click "+ Next Steps" inside any box to expand</span>
+</div>
+
+<div class="pace-board">
+  <div class="board-title">
+    <h2>Key Process to Making Money</h2>
+    <div class="source">Loop reads clockwise: START → 1–5 (customer flow, CLOSE at 5) → 6–7 (post-close ops) → 8–12 (people + finance support) → FINISH</div>
+  </div>
+
+  <!-- STRATEGIC LAYER -->
+  <div class="layer-strip strategic green" data-layer="strategic">
+    <div class="layer-rail">
+      <div class="layer-label">Strategic Layer</div>
+      <div class="layer-tag">sets direction</div>
+    </div>
+    <div class="layer-content">
+      <div class="color-dot" onclick="cycleColor(this)"></div>
+      <div class="name" contenteditable="true">Strategic Planning &amp; Business Development</div>
+      <div class="meta">
+        <div class="who" contenteditable="true">Cameron</div>
+        <div class="kpis" contenteditable="true">Revenue growth rate</div>
+      </div>
+      <details class="next-steps">
+        <summary>Next Steps</summary>
+        <div class="ns-body" contenteditable="true"></div>
+      </details>
+    </div>
+  </div>
+  <div class="layer-arrow">↓<span class="label">direction sets the loop</span></div>
+
+  <div class="loop-grid">
+
+    <!-- LEFT column (loop going UP from box 8 to box 12) -->
+    <div class="col-left">
+      <div class="pbox yellow" data-num="12">
+        <div class="num">12</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Financial Reporting &amp; Analysis</div>
+        <div class="who" contenteditable="true">Paul</div>
+        <div class="kpis" contenteditable="true">Accuracy of reporting · Data reporting turnaround time</div>
+        <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+      </div>
+      <div class="pbox green" data-num="11">
+        <div class="num">11</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Manager Performance Evaluation</div>
+        <div class="who" contenteditable="true">Cameron/Anne</div>
+        <div class="kpis" contenteditable="true">People Analyzer avg score · % A players</div>
+        <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+      </div>
+      <div class="pbox green" data-num="10">
+        <div class="num">10</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Event Planning / Culture Mgmt</div>
+        <div class="who" contenteditable="true">Brian</div>
+        <div class="kpis" contenteditable="true">eNPS · Participation %</div>
+        <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+      </div>
+      <div class="pbox yellow" data-num="9">
+        <div class="num">9</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Mover Performance Mgmt</div>
+        <div class="who" contenteditable="true">Anne (Brian input)</div>
+        <div class="kpis" contenteditable="true">Praise goals · A/B/C % · Legends</div>
+        <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+      </div>
+      <div class="pbox yellow" data-num="8">
+        <div class="num">8</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Employee Recruitment &amp; Onboarding</div>
+        <div class="who" contenteditable="true">Anne</div>
+        <div class="kpis" contenteditable="true">Cost per hire · Time to fill</div>
+        <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+      </div>
+    </div>
+
+    <!-- CENTER column -->
+    <div class="col-center">
+      <div class="marker">FINISH ← 12   ·   START → 1</div>
+      <div class="improvement">
+        <h3>Cross-Cutting / Parking Lot</h3>
+        <div class="sub">For ideas that span multiple boxes or aren't yet placed.</div>
+        <div class="ideas" contenteditable="true"></div>
+      </div>
+      <div class="center-bottom-pair">
+        <div class="pbox yellow" data-num="7">
+          <div class="num">7</div>
+          <div class="color-dot" onclick="cycleColor(this)"></div>
+          <div class="name" contenteditable="true">Inventory Management</div>
+          <div class="who" contenteditable="true">Mike</div>
+          <div class="kpis" contenteditable="true">Inventory % of revenue</div>
+          <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+        </div>
+        <div class="pbox yellow" data-num="6">
+          <div class="num">6</div>
+          <div class="color-dot" onclick="cycleColor(this)"></div>
+          <div class="name" contenteditable="true">Fleet Management</div>
+          <div class="who" contenteditable="true">Mike</div>
+          <div class="kpis" contenteditable="true">Maintenance cost/truck · Truck downtime</div>
+          <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT column (loop going DOWN from box 1 to box 5/CLOSE) -->
+    <div class="col-right">
+      <div class="pbox green" data-num="1">
+        <div class="num">1</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Generate Demand: Marketing &amp; Promotion</div>
+        <div class="who" contenteditable="true">Kickpoint/Matisen</div>
+        <div class="kpis" contenteditable="true"># SQLs · Cost per conversion · ROAS</div>
+        <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+      </div>
+      <div class="pbox red" data-num="2">
+        <div class="num">2</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Convert on Demand: Customer Booking &amp; Scheduling (incl. Sales Training)</div>
+        <div class="who" contenteditable="true">Amanda</div>
+        <div class="kpis" contenteditable="true">Conversion rate · Estimate accuracy · Avg response time</div>
+        <details class="next-steps" open><summary>Next Steps to Green</summary><div class="ns-body" contenteditable="true"><p><b>Big bet:</b> real CRM — automated follow-ups, lead triage + scoring, comm hub, AI chatbot, customer portal.</p><div class="ns-section">Conversion Rate</div><ul><li>Re-baseline post new funnel (apples-to-apples first)</li><li><span class="qg-tag">QG</span>Tighter sales-funnel emails</li><li>Short-term lever: response time on high-intent leads</li><li>Rises further as estimate accuracy + dynamic pricing mature</li></ul><div class="ns-section">Estimate Accuracy</div><ul><li>Gut-check: estimate-vs-actual analysis, tune the algorithm</li><li>Test new intake signals ("how long in current home")</li><li><span class="qg-tag">QG</span>Long-term: mobile app → granular data for real analysis</li></ul><div class="ns-section">Grading &amp; Coaching</div><ul><li><span class="qg-tag">QG</span>AI call grading feeds coaching</li><li>Any move &gt;40% over/under estimate auto-queues for review, with end-of-move report flagging likely cause</li></ul></div></details>
+      </div>
+      <div class="pbox yellow" data-num="3">
+        <div class="num">3</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Run the Move: Dispatch &amp; Logistics</div>
+        <div class="who" contenteditable="true">Mike/Brian</div>
+        <div class="kpis" contenteditable="true">Damages per hour · TUR · NPS</div>
+        <details class="next-steps" open><summary>Next Steps to Green</summary><div class="ns-body" contenteditable="true"><div class="ns-section">Damages per Hour</div><ul><li><span class="qg-tag">QG</span>Improved damage reporting and damage accountability</li><li><span class="qg-tag">QG</span>Improve / expand mover training (implement Samsara scoring and retraining)</li></ul><div class="ns-section">TUR</div><ul><li><span class="qg-tag">QG</span>Retrain and audit the hiring funnel (consistency of applicant dismissal) — visualize the funnel</li><li><span class="qg-tag">QG</span>Hire an HR Generalist to improve culture screening, reduce time to hire, lift applicant conversion rate</li></ul><div class="ns-section">NPS</div><ul><li>Improve training around review generation</li><li>Improve our tech stack to help generate reviews; reduce barriers (review gating process)</li></ul></div></details>
+      </div>
+      <div class="pbox yellow" data-num="4">
+        <div class="num">4</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Collect Money</div>
+        <div class="who" contenteditable="true">Paul</div>
+        <div class="kpis" contenteditable="true">Onsite Collection % · Manager Collection % · Swipe Percentage</div>
+        <details class="next-steps" open><summary>Next Steps to Green</summary><div class="ns-body" contenteditable="true"><div class="ns-section">Onsite Collection %</div><ul><li>Mid-move text to the customer</li><li>Clover integrated into the invoice app — per-mover tracking, surfaces collection trends by individual over time</li></ul><div class="ns-section">Manager Collection % (after the move)</div><ul><li>Auto-create a Monday pulse when an "invoice later" email comes in, with a hard 24-hr follow-up rule baked in</li><li>Track + publish lead-mover swipe % rankings; anyone over 10% manual entry gets a coaching conversation</li><li>Lead Training — add payment collection (swipe protocol, manual entry thresholds) to the lead training handbook with a knowledge check</li><li>Switch from iPad to Android — eliminates the need for a separate Clover device, removing the workaround that causes manual entry</li></ul></div></details>
+      </div>
+      <div class="pbox green" data-num="5">
+        <div class="num">5</div>
+        <div class="color-dot" onclick="cycleColor(this)"></div>
+        <div class="name" contenteditable="true">Post-Move Customer Experience: Claims &amp; Reputation Management</div>
+        <div class="who" contenteditable="true">Carly</div>
+        <div class="kpis" contenteditable="true">Avg resolution time · NPS / Reviews · Cost per claim</div>
+        <details class="next-steps"><summary>Next Steps</summary><div class="ns-body" contenteditable="true"></div></details>
+        <div class="close-tag">CLOSE</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="layer-arrow">↑<span class="label">data flows up from every box</span></div>
+  <!-- FOUNDATION LAYER -->
+  <div class="layer-strip foundation yellow" data-layer="foundation">
+    <div class="layer-rail">
+      <div class="layer-label">Foundation Layer</div>
+      <div class="layer-tag">powers the loop</div>
+    </div>
+    <div class="layer-content">
+      <div class="color-dot" onclick="cycleColor(this)"></div>
+      <div class="name" contenteditable="true">Data Management</div>
+      <div class="meta">
+        <div class="who" contenteditable="true">Matisen</div>
+        <div class="kpis" contenteditable="true">Database costs · Dashboard uptime · Data accuracy</div>
+      </div>
+      <details class="next-steps">
+        <summary>Next Steps</summary>
+        <div class="ns-body" contenteditable="true"></div>
+      </details>
+    </div>
+  </div>
+</div>
+
+<div class="quarter-analysis-card">
+  <div class="qa-eyebrow"><span class="qa-badge">Archive</span>Captured at end of quarter for reference + next-quarter brainstorming.</div>
+  <h3 id="qaTitle">Q1 2026 Analysis</h3>
+  <div class="qa-body" contenteditable="true">
+    <p><b>Net read:</b> 1 Red, 7 Yellow, 4 Green across the 12 boxes; layers split 1 Green / 1 Yellow. The customer-facing right side is healthy at the bookends (Generate Demand, Post-Move CX) — the meat of the loop (Convert, Run the Move, Collect Money) is where the work sits. Support processes are mostly Yellow because instrumentation is uneven, not because the work is broken.</p>
+
+    <p><b>Box 2 RED — Convert on Demand:</b> VP rollout broke the conversion baseline; team-level rates dropped ~10%; Nhel's Q1 rock landed G* with asterisk for that exact reason. Highest-leverage box on the chart and the only Red — plan in Box 2's Next Steps.</p>
+    <p><b>Box 3 Yellow — Run the Move:</b> Damages/hr + TUR + NPS are real but mixed. Mike + Brian co-own. Damage accountability and hiring-funnel quality are the levers. Plan in Box 3.</p>
+    <p><b>Box 4 Yellow — Collect Money:</b> Onsite + Manager Collection % visible but operationally messy (iPad/Clover workaround). Tech swap to Android + per-mover swipe rankings is the clearest path. Plan in Box 4.</p>
+    <p><b>Box 6 Yellow — Fleet Management:</b> Sold 2 trucks late-Q; maintenance discipline holding but trending toward Yellow as fleet ages.</p>
+    <p><b>Box 7 Yellow — Inventory Management:</b> Low instrumentation; honest call until we have a number worth defending.</p>
+    <p><b>Box 8 Yellow — Recruitment:</b> Anne Q1 0 SG / 2 G / 3 R; Leander + Houston confirmed availability-constrained.</p>
+    <p><b>Box 9 Yellow — Mover Performance Mgmt:</b> 100-Point System pre-rollout; A/B/C work in collection, not yet operational.</p>
+    <p><b>Box 12 Yellow — Financial Reporting:</b> Controllers ungraded for Q1; Prosper VCFO transition mid-flight.</p>
+    <p><b>Foundation Yellow — Data Management:</b> EMMA migration ongoing; dashboard inconsistency a known weak spot Q2 will press on.</p>
+
+    <p><b>Q2 watchlist:</b> the QG-tagged items inside Boxes 2, 3, and 4 are the candidate Q2 rocks surfaced by this exercise. Filter and triage during Q2 rock-setting.</p>
+  </div>
+</div>
+
+<div class="rob-card">
+  <h3><span class="badge">For Rob</span>How do Pillars, Flywheel, PACe, and OPSP fit together?</h3>
+  <div class="sub">Open conversation point — not a PACe deliverable. CEO-altitude question about how to use the toolkit in concert.</div>
+  <div class="rob-card-body" contenteditable="true">
+    <p><b>The question:</b> How should we use Pillars + Flywheel + PACe + OPSP <i>in conjunction</i> — and what should organize the Master Backlog?</p>
+    <p><b>What we have running right now:</b></p>
+    <ul>
+      <li><b>5 Strategic Pillars</b> — Mover-First Economics · Op Ex · Financial Excellence · CX · Growth</li>
+      <li><b>Flywheel</b> — 6 components, sub-flywheels in progress</li>
+      <li><b>PACe</b> — 12 process boxes + 2 layers (this document)</li>
+      <li><b>OPSP</b> — the plan everything serves</li>
+      <li><b>Master Backlog</b> — 60+ rocks across all leaders, currently grouped by leader</li>
+    </ul>
+    <p>Each framework surfaces priorities — sometimes the same ones, sometimes different. The result is a sprawling backlog that still needs triage regardless of which lens we look through.</p>
+    <p><b>My current hypothesis:</b> these frameworks are <i>diagnostic</i>, not <i>prioritizing</i>. They help me <i>see</i> issues and opportunities; they don't decide what gets done first. The triage still happens through OPSP rocks + quarterly cadence — the frameworks feed that decision.</p>
+    <p><b>What I'd like from you:</b></p>
+    <ul>
+      <li>Is that diagnostic-vs-prioritizing distinction right, or am I missing the point?</li>
+      <li>Should the Master Backlog be reorganized around one of these (Pillars feels the most natural)?</li>
+      <li>How do other Scaling Up companies use these tools in concert without sprawl?</li>
+      <li>Is there a precedence order — e.g., Pillars set direction → PACe finds process gaps → Flywheel checks customer flow → OPSP captures the rocks?</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const COLORS = ['green', 'yellow', 'red', 'gray'];
+  const SAVE_KEY = 'einstein-pace-v2';
+  const DB_NAME = 'einstein-pace-db';
+  const STORE = 'handles';
+  const HANDLE_KEY = 'paceFile';
+
+  let fileHandle = null;
+  let fileWriteTimer = null;
+
+  // ---------- IndexedDB helpers ----------
+  function openDB() {
+    return new Promise((res, rej) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = () => req.result.createObjectStore(STORE);
+      req.onsuccess = () => res(req.result);
+      req.onerror = () => rej(req.error);
+    });
+  }
+  async function idbGet(key) {
+    const db = await openDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(STORE, 'readonly');
+      const r = tx.objectStore(STORE).get(key);
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    });
+  }
+  async function idbSet(key, val) {
+    const db = await openDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).put(val, key);
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+  async function idbDel(key) {
+    const db = await openDB();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).delete(key);
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+
+  // ---------- State ----------
+  function getState() {
+    return {
+      _meta: {
+        quarter: document.querySelector('[data-id="quarter"]').innerText,
+        lastUpdated: new Date().toISOString()
+      },
+      whoTag: document.querySelector('[data-id="who-tag"]').innerText,
+      boxes: [...document.querySelectorAll('.pbox[data-num]')].map(b => ({
+        num: b.dataset.num,
+        color: COLORS.find(c => b.classList.contains(c)) || 'gray',
+        name: b.querySelector('.name').innerText,
+        who: b.querySelector('.who').innerText,
+        kpis: b.querySelector('.kpis').innerText,
+        nextSteps: b.querySelector('.next-steps .ns-body').innerHTML
+      })),
+      layers: [...document.querySelectorAll('.layer-strip')].map(l => ({
+        layer: l.dataset.layer,
+        color: COLORS.find(c => l.classList.contains(c)) || 'gray',
+        name: l.querySelector('.name').innerText,
+        who: l.querySelector('.who').innerText,
+        kpis: l.querySelector('.kpis').innerText,
+        nextSteps: l.querySelector('.next-steps .ns-body').innerHTML
+      })),
+      ideas: document.querySelector('.improvement .ideas').innerHTML,
+      quarterAnalysis: document.querySelector('.qa-body').innerHTML,
+      rob: document.querySelector('.rob-card-body').innerHTML
+    };
+  }
+
+  function applyState(s) {
+    if (!s) return;
+    // Legacy state (pre-migration) lacks _meta — preserve the new HTML defaults
+    // for fields that didn't exist in v1 (nextSteps per box/layer, quarterAnalysis,
+    // and the now-empty parking lot). This prevents loading the old "Improvement
+    // Ideas" pane content that has since been migrated into per-box Next Steps.
+    const isLegacy = !s._meta;
+    if (s._meta?.quarter) document.querySelector('[data-id="quarter"]').innerText = s._meta.quarter;
+    if (s._meta?.lastUpdated) document.getElementById('lastUpdated').innerText = formatDate(s._meta.lastUpdated);
+    if (s.whoTag) document.querySelector('[data-id="who-tag"]').innerText = s.whoTag;
+    (s.boxes || []).forEach(item => {
+      const box = document.querySelector(`.pbox[data-num="${item.num}"]`);
+      if (!box) return;
+      COLORS.forEach(c => box.classList.remove(c));
+      box.classList.add(item.color);
+      box.querySelector('.name').innerText = item.name;
+      box.querySelector('.who').innerText = item.who;
+      box.querySelector('.kpis').innerText = item.kpis;
+      if (!isLegacy && item.nextSteps !== undefined) {
+        box.querySelector('.next-steps .ns-body').innerHTML = item.nextSteps;
+      }
+    });
+    (s.layers || []).forEach(item => {
+      const strip = document.querySelector(`.layer-strip[data-layer="${item.layer}"]`);
+      if (!strip) return;
+      COLORS.forEach(c => strip.classList.remove(c));
+      strip.classList.add(item.color);
+      strip.querySelector('.name').innerText = item.name;
+      strip.querySelector('.who').innerText = item.who;
+      strip.querySelector('.kpis').innerText = item.kpis;
+      if (!isLegacy && item.nextSteps !== undefined) {
+        strip.querySelector('.next-steps .ns-body').innerHTML = item.nextSteps;
+      }
+    });
+    if (!isLegacy && s.ideas !== undefined) document.querySelector('.improvement .ideas').innerHTML = s.ideas;
+    if (!isLegacy && s.quarterAnalysis !== undefined) document.querySelector('.qa-body').innerHTML = s.quarterAnalysis;
+    if (s.rob !== undefined) document.querySelector('.rob-card-body').innerHTML = s.rob;
+    updateCounts();
+    updateQATitle();
+  }
+
+  function formatDate(iso) {
+    try {
+      return new Date(iso).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+    } catch (e) { return iso; }
+  }
+
+  function updateCounts() {
+    const counts = { green: 0, yellow: 0, red: 0, gray: 0 };
+    document.querySelectorAll('.pbox[data-num], .layer-strip').forEach(el => {
+      const c = COLORS.find(x => el.classList.contains(x)) || 'gray';
+      counts[c]++;
+    });
+    let html = `🟢 ${counts.green}  🟡 ${counts.yellow}  🔴 ${counts.red}`;
+    if (counts.gray) html += `  ⚪ ${counts.gray}`;
+    document.getElementById('colorCounts').innerHTML = html;
+  }
+
+  function updateQATitle() {
+    const q = document.querySelector('[data-id="quarter"]').innerText;
+    document.getElementById('qaTitle').textContent = `${q} Analysis`;
+  }
+
+  // ---------- Color cycle ----------
+  function cycleColor(dot) {
+    const box = dot.closest('.pbox, .layer-strip');
+    const cur = COLORS.find(c => box.classList.contains(c)) || 'gray';
+    const next = COLORS[(COLORS.indexOf(cur) + 1) % COLORS.length];
+    box.classList.remove(cur);
+    box.classList.add(next);
+    save();
+  }
+
+  // ---------- Save ----------
+  function save() {
+    const state = getState();
+    document.getElementById('lastUpdated').innerText = formatDate(state._meta.lastUpdated);
+    updateCounts();
+    updateQATitle();
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch (e) {}
+    if (fileHandle) {
+      clearTimeout(fileWriteTimer);
+      fileWriteTimer = setTimeout(() => writeStateToFile(state), 400);
+    } else {
+      setStatus('Browser backup · ' + clockNow());
+    }
+  }
+
+  async function writeStateToFile(state) {
+    try {
+      const writable = await fileHandle.createWritable();
+      await writable.write(JSON.stringify(state, null, 2));
+      await writable.close();
+      setStatus('💾 Saved to ' + fileHandle.name + ' · ' + clockNow());
+    } catch (e) {
+      console.error(e);
+      setStatus('⚠ File write failed — browser backup only');
+    }
+  }
+
+  async function saveToFileLink() {
+    if (!('showSaveFilePicker' in window)) {
+      const blob = new Blob([JSON.stringify(getState(), null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'einstein-pace-state.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      setStatus('Downloaded snapshot (browser does not support file linking)');
+      return;
+    }
+    try {
+      fileHandle = await window.showSaveFilePicker({
+        suggestedName: 'einstein-pace-state.json',
+        types: [{ description: 'PACe state', accept: { 'application/json': ['.json'] } }]
+      });
+      try { await idbSet(HANDLE_KEY, fileHandle); } catch (e) {}
+      await writeStateToFile(getState());
+      updateLinkButtons();
+    } catch (e) { if (e.name !== 'AbortError') console.error(e); }
+  }
+
+  async function openFromFile() {
+    if (!('showOpenFilePicker' in window)) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/json';
+      input.onchange = async () => {
+        const f = input.files[0];
+        if (!f) return;
+        applyState(JSON.parse(await f.text()));
+        setStatus('Loaded snapshot (read-only — file linking unsupported here)');
+      };
+      input.click();
+      return;
+    }
+    try {
+      const [handle] = await window.showOpenFilePicker({
+        types: [{ description: 'PACe state', accept: { 'application/json': ['.json'] } }]
+      });
+      fileHandle = handle;
+      try { await idbSet(HANDLE_KEY, fileHandle); } catch (e) {}
+      const f = await handle.getFile();
+      applyState(JSON.parse(await f.text()));
+      setStatus('💾 Linked: ' + handle.name);
+      updateLinkButtons();
+    } catch (e) { if (e.name !== 'AbortError') console.error(e); }
+  }
+
+  async function reconnectFile() {
+    try {
+      const handle = await idbGet(HANDLE_KEY);
+      if (!handle) return;
+      const perm = await handle.requestPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') {
+        setStatus('⚠ Permission denied — using browser backup');
+        return;
+      }
+      fileHandle = handle;
+      const f = await handle.getFile();
+      applyState(JSON.parse(await f.text()));
+      setStatus('💾 Linked: ' + handle.name);
+      document.getElementById('reconnectBtn').style.display = 'none';
+      updateLinkButtons();
+    } catch (e) { console.error(e); }
+  }
+
+  async function unlinkFile() {
+    fileHandle = null;
+    try { await idbDel(HANDLE_KEY); } catch (e) {}
+    setStatus('Unlinked · browser backup only');
+    updateLinkButtons();
+  }
+
+  function updateLinkButtons() {
+    const btn = document.getElementById('saveFileBtn');
+    const unlink = document.getElementById('unlinkBtn');
+    if (fileHandle) {
+      btn.textContent = '💾 ' + fileHandle.name;
+      unlink.style.display = 'inline-block';
+    } else {
+      btn.textContent = '💾 Save to File…';
+      unlink.style.display = 'none';
+    }
+  }
+
+  function loadFromLocalStorage() {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return false;
+    try { applyState(JSON.parse(raw)); return true; }
+    catch (e) { console.error(e); return false; }
+  }
+
+  function setStatus(msg) {
+    document.getElementById('saveStatus').textContent = msg;
+  }
+
+  function clockNow() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function resetAll() {
+    if (!confirm('Reset all fields to defaults? Erases browser backup AND unlinks file.')) return;
+    localStorage.removeItem(SAVE_KEY);
+    fileHandle = null;
+    idbDel(HANDLE_KEY).catch(() => {});
+    location.reload();
+  }
+
+  // ---------- Markdown export ----------
+  function copyMarkdown() {
+    const quarter = document.querySelector('[data-id="quarter"]').innerText;
+    const lastUpd = document.getElementById('lastUpdated').innerText;
+    const layerLine = sel => {
+      const l = document.querySelector(`.layer-strip[data-layer="${sel}"]`);
+      const c = COLORS.find(x => l.classList.contains(x)) || 'gray';
+      const emoji = { green: '🟢', yellow: '🟡', red: '🔴', gray: '⚪' }[c];
+      const ns = l.querySelector('.next-steps .ns-body').innerText.trim();
+      let out = `${emoji} **${l.querySelector('.name').innerText}** — WHO: ${l.querySelector('.who').innerText} — KPIs: ${l.querySelector('.kpis').innerText}`;
+      if (ns) out += `\n\n*Next Steps:*\n${ns}`;
+      return out;
+    };
+    const buildBoxBlock = b => {
+      const c = COLORS.find(x => b.classList.contains(x)) || 'gray';
+      const emoji = { green: '🟢', yellow: '🟡', red: '🔴', gray: '⚪' }[c];
+      const close = b.querySelector('.close-tag') ? ' (CLOSE)' : '';
+      const ns = b.querySelector('.next-steps .ns-body').innerText.trim();
+      let out = `### ${emoji} Box ${b.dataset.num}${close} — ${b.querySelector('.name').innerText}\n- **Who:** ${b.querySelector('.who').innerText}\n- **KPIs:** ${b.querySelector('.kpis').innerText}`;
+      if (ns) out += `\n- **Next Steps:**\n${ns.split('\n').map(line => '  ' + line).join('\n')}`;
+      return out;
+    };
+    const boxes = [...document.querySelectorAll('.pbox[data-num]')]
+      .sort((a, b) => +a.dataset.num - +b.dataset.num)
+      .map(buildBoxBlock).join('\n\n');
+    const md = `# E=MCash² — ${document.querySelector('[data-id="who-tag"]').innerText}
+
+**Quarter:** ${quarter} · **Last Updated:** ${lastUpd}
+
+## Strategic Layer (sets direction)
+${layerLine('strategic')}
+
+## Key Process to Making Money
+
+${boxes}
+
+## Foundation Layer (powers the loop)
+${layerLine('foundation')}
+
+## Cross-Cutting / Parking Lot
+${document.querySelector('.improvement .ideas').innerText}
+
+## ${quarter} Analysis
+${document.querySelector('.qa-body').innerText}
+
+## For Rob — Discussion
+${document.querySelector('.rob-card-body').innerText}`;
+    navigator.clipboard.writeText(md).then(() => setStatus('Markdown copied to clipboard'));
+  }
+
+  // ---------- Print: open all details, restore after ----------
+  window.addEventListener('beforeprint', () => {
+    document.querySelectorAll('details').forEach(d => {
+      d.dataset.wasOpen = d.open ? '1' : '0';
+      d.open = true;
+    });
+  });
+  window.addEventListener('afterprint', () => {
+    document.querySelectorAll('details').forEach(d => {
+      if (d.dataset.wasOpen !== undefined) {
+        d.open = d.dataset.wasOpen === '1';
+        delete d.dataset.wasOpen;
+      }
+    });
+  });
+
+  // ---------- Auto-save on edit ----------
+  document.addEventListener('input', e => {
+    if (e.target.isContentEditable) save();
+  });
+
+  // ---------- Bootstrap ----------
+  (async () => {
+    try {
+      const handle = await idbGet(HANDLE_KEY);
+      if (handle && 'queryPermission' in handle) {
+        const perm = await handle.queryPermission({ mode: 'readwrite' });
+        if (perm === 'granted') {
+          fileHandle = handle;
+          const f = await handle.getFile();
+          applyState(JSON.parse(await f.text()));
+          setStatus('💾 Linked: ' + handle.name);
+          updateLinkButtons();
+          return;
+        }
+        if (perm === 'prompt') {
+          const rb = document.getElementById('reconnectBtn');
+          rb.textContent = '📎 Reconnect to ' + handle.name;
+          rb.style.display = 'inline-block';
+          setStatus('Linked file detected — click Reconnect to restore live save');
+        }
+      }
+    } catch (e) { /* fall through */ }
+
+    if (loadFromLocalStorage()) {
+      setStatus('Restored from browser backup · click "Save to File" for durable save');
+    } else {
+      updateCounts();
+      updateQATitle();
+      document.getElementById('lastUpdated').innerText = formatDate(new Date().toISOString());
+    }
+    updateLinkButtons();
+  })();
+</script>
+</body>
+</html>
