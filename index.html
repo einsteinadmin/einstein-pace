@@ -579,10 +579,140 @@
   .rob-card-body ul { margin: 4px 0 8px 22px; }
   .rob-card-body li { margin-bottom: 3px; }
 
+  /* ---------- GRADE HISTORY TREND ---------- */
+  .trend {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed var(--gray-2);
+  }
+  .trend .trend-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9px;
+    color: var(--gray-3);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: default;
+  }
+  .trend .trend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+  .trend .trend-dot.green { background: var(--green); }
+  .trend .trend-dot.yellow { background: var(--yellow); }
+  .trend .trend-dot.red { background: var(--red); }
+  .trend .trend-dot.gray { background: #ccc; }
+  .trend .trend-prov {
+    font-size: 7px;
+    font-weight: 700;
+    color: white;
+    padding: 1px 3px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+  }
+  .trend .trend-prov.cp { background: #b8801a; }
+  .trend .trend-prov.team { background: #3b6fd6; }
+
+  .pace-tooltip {
+    position: fixed;
+    z-index: 9999;
+    max-width: 260px;
+    background: var(--dark);
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    font-size: 11.5px;
+    line-height: 1.45;
+    padding: 8px 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    pointer-events: none;
+    display: none;
+  }
+  .pace-tooltip .pt-head {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    font-size: 12px;
+    margin-bottom: 3px;
+    color: var(--orange);
+  }
+  .pace-tooltip .pt-prov { color: #bbb; font-style: italic; margin-bottom: 3px; }
+
+  .grade-popover {
+    position: fixed;
+    z-index: 9999;
+    width: 280px;
+    background: white;
+    border: 1px solid var(--gray-2);
+    border-left: 4px solid var(--orange);
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    padding: 12px;
+    font-family: 'Roboto', sans-serif;
+  }
+  .grade-popover .gp-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    color: var(--dark);
+  }
+  .grade-popover textarea {
+    width: 100%;
+    min-height: 70px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    padding: 6px;
+    border: 1px solid var(--gray-2);
+    border-radius: 4px;
+    resize: vertical;
+    margin-bottom: 8px;
+  }
+  .grade-popover .gp-toggle {
+    display: flex;
+    border: 1px solid var(--gray-2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .grade-popover .gp-toggle button {
+    flex: 1;
+    border: none;
+    background: white;
+    padding: 6px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+  }
+  .grade-popover .gp-toggle button.active.cp { background: #b8801a; color: white; }
+  .grade-popover .gp-toggle button.active.team { background: #3b6fd6; color: white; }
+  .grade-popover .gp-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .grade-popover .gp-actions button {
+    border: 1px solid var(--gray-2);
+    background: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+  }
+  .grade-popover .gp-actions button.save { background: var(--orange); color: white; border-color: var(--orange); }
+
   /* ---------- PRINT ---------- */
   @media print {
     body { padding: 0; background: white; }
-    .toolbar, .legend, button { display: none; }
+    .toolbar, .legend, button, .trend, .pace-tooltip, .grade-popover { display: none; }
     .pace-board, .quarter-analysis-card, .rob-card, .quarter-meta { box-shadow: none; border-color: #ccc; }
     .pbox, .layer-strip { break-inside: avoid; page-break-inside: avoid; }
     details > *:not(summary) { display: block !important; }
@@ -618,6 +748,7 @@
   <button class="tool" id="unlinkBtn" onclick="unlinkFile()" style="display:none">🔗 Unlink</button>
   <button class="tool" onclick="copyMarkdown()">Copy as Markdown</button>
   <button class="tool" onclick="window.print()">Print / Save PDF</button>
+  <button class="tool" onclick="teamFinalizeQuarter()">✓ Team-finalize quarter</button>
   <button class="tool" onclick="resetAll()">Reset Defaults</button>
   <span class="status" id="saveStatus">Browser backup only — click "Save to File" to link</span>
 </div>
@@ -888,13 +1019,74 @@
 
 <script>
   const COLORS = ['green', 'yellow', 'red', 'gray'];
-  const SAVE_KEY = 'einstein-pace-v3'; // v3 2026-07-20: Q2 grades + analysis baked in — key bumped so stale Q1 browser backups don't override
+  const SAVE_KEY = 'einstein-pace-v3'; // v4 2026-07-20 history feature — key value unchanged; old v3 saves lack history and merge safely (baked seed used as fallback)
   const DB_NAME = 'einstein-pace-db';
   const STORE = 'handles';
   const HANDLE_KEY = 'paceFile';
 
   let fileHandle = null;
   let fileWriteTimer = null;
+
+  // ---------- Grade History ----------
+  let HISTORY = {
+    '1': [
+      { q: 'Q1 2026', color: 'green', by: 'TEAM', note: 'Healthy bookend — demand generation performing.' },
+      { q: 'Q2 2026', color: 'green', by: 'CP', note: 'Held green.' }
+    ],
+    '2': [
+      { q: 'Q1 2026', color: 'red', by: 'TEAM', note: 'VP rollout broke the conversion baseline; team-level rates dropped ~10%.' },
+      { q: 'Q2 2026', color: 'red', by: 'CP', note: 'Basis formally broken (19.9% vs 40% not comparable — two definition changes). Call-side delivery flat: 181 graded calls show Pricing/Differentiators ~57–62%, Meet Your Mover ~1 in 5. Coaching loop is the missing piece.' }
+    ],
+    '3': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: 'Damages/hr + TUR + NPS real but mixed; damage accountability + hiring-funnel quality are the levers.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Damages reframed to branch-level cost of doing business (finalizes at QGR). TUR definition gap surfaced → staffing-per-truck model in build (~4 wks).' }
+    ],
+    '4': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: 'Collection % visible but operationally messy (iPad/Clover workaround).' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Holding; Android/Clover swap still the clearest path. Carries forward.' }
+    ],
+    '5': [
+      { q: 'Q1 2026', color: 'green', by: 'TEAM', note: 'Post-move CX performing.' },
+      { q: 'Q2 2026', color: 'green', by: 'CP', note: 'Held green.' }
+    ],
+    '6': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: 'Sold 2 trucks late-Q; maintenance discipline holding but fleet aging.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Fleet insurance +40% (~$200K) YoY; total insurance exposure ≈$903K/yr unowned. $315K closed-truck recovery pending handoff.' }
+    ],
+    '7': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: 'Low instrumentation; honest call until we have a number worth defending.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Unchanged — still under-instrumented.' }
+    ],
+    '8': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: '0 SG / 2 G / 3 R; Leander + Houston availability-constrained.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Trending green: hiring dashboard Super Green; trial-day elimination locked for Aug 1; HPEs kicked off.' }
+    ],
+    '9': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: '100-Point System pre-rollout; A/B/C work in collection.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Promotion framework decided 7/2, handed to Anne — first cohort rides her Q3 critical number.' }
+    ],
+    '10': [
+      { q: 'Q1 2026', color: 'green', by: 'TEAM', note: 'Culture engine performing.' },
+      { q: 'Q2 2026', color: 'green', by: 'CP', note: 'Held green.' }
+    ],
+    '11': [
+      { q: 'Q1 2026', color: 'green', by: 'TEAM', note: 'People Analyzer cadence in place.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Downgrade — honesty call: managers don\'t understand their own performance as well as they should. Fix = regular reporting + dashboards between QGRs; People Analyzer tooled 7/20.' }
+    ],
+    '12': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: 'Controllers ungraded; Prosper VCFO transition mid-flight.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Improving: first full Sage month closed, Prosper weekly cadence live; D&A ~$600K reconciliation open, EBITDA emphasized.' }
+    ],
+    'strategic': [
+      { q: 'Q1 2026', color: 'green', by: 'TEAM', note: '' },
+      { q: 'Q2 2026', color: 'green', by: 'CP', note: 'Held.' }
+    ],
+    'foundation': [
+      { q: 'Q1 2026', color: 'yellow', by: 'TEAM', note: 'EMMA migration ongoing; dashboard inconsistency a known weak spot.' },
+      { q: 'Q2 2026', color: 'yellow', by: 'CP', note: 'Best-evidenced weakness of the quarter: Games scoring fork, TUR definition gap, Rippling hours outage, conversion-basis break. Single-person dependency (Matisen queue) named. Governance workstream = proposed answer.' }
+    ]
+  };
+  const HISTORY_SEED = JSON.parse(JSON.stringify(HISTORY)); // baked default, used when a loaded save has no history
 
   // ---------- IndexedDB helpers ----------
   function openDB() {
@@ -959,7 +1151,8 @@
       })),
       ideas: document.querySelector('.improvement .ideas').innerHTML,
       quarterAnalysis: document.querySelector('#qaCurrent').innerHTML,
-      rob: document.querySelector('.rob-card-body').innerHTML
+      rob: document.querySelector('.rob-card-body').innerHTML,
+      history: HISTORY
     };
   }
 
@@ -1000,8 +1193,10 @@
     if (!isLegacy && s.ideas !== undefined) document.querySelector('.improvement .ideas').innerHTML = s.ideas;
     if (!isLegacy && s.quarterAnalysis !== undefined) document.querySelector('#qaCurrent').innerHTML = s.quarterAnalysis;
     if (s.rob !== undefined) document.querySelector('.rob-card-body').innerHTML = s.rob;
+    if (s.history) HISTORY = s.history; // else keep the baked seed
     updateCounts();
     updateQATitle();
+    renderAllTrends();
   }
 
   function formatDate(iso) {
@@ -1033,7 +1228,191 @@
     const next = COLORS[(COLORS.indexOf(cur) + 1) % COLORS.length];
     box.classList.remove(cur);
     box.classList.add(next);
+
+    const key = keyFor(box);
+    const quarter = currentQuarter();
+    const entry = findOrCreateEntry(key, quarter);
+    entry.color = next;
+    entry.by = 'CP';
+    renderTrend(box, key);
     save();
+    openGradePopover(dot, entry, box, key);
+  }
+
+  // ---------- Grade History: keys + entries ----------
+  function keyFor(el) {
+    if (el.classList.contains('layer-strip')) return el.dataset.layer;
+    return el.dataset.num;
+  }
+  function currentQuarter() {
+    return document.querySelector('[data-id="quarter"]').innerText.trim();
+  }
+  function findOrCreateEntry(key, quarter) {
+    if (!HISTORY[key]) HISTORY[key] = [];
+    let entry = HISTORY[key].find(e => e.q === quarter);
+    if (!entry) {
+      entry = { q: quarter, color: 'gray', by: 'CP', note: '' };
+      HISTORY[key].push(entry);
+    }
+    return entry;
+  }
+
+  // ---------- Grade History: trend strip render ----------
+  function qLabel(q) {
+    // "Q2 2026" -> "Q2'26"
+    const m = /^(Q\d)\s*(\d{2,4})$/.exec(q || '');
+    if (!m) return q;
+    return m[1] + "'" + m[2].slice(-2);
+  }
+  function renderTrend(el, key) {
+    const arr = HISTORY[key] || [];
+    // host: pbox gets the trend row appended directly; layer-strip appends inside .layer-content
+    const host = el.classList.contains('layer-strip') ? el.querySelector('.layer-content') : el;
+    let trend = host.querySelector(':scope > .trend');
+    if (!trend) {
+      trend = document.createElement('div');
+      trend.className = 'trend';
+      host.appendChild(trend);
+    }
+    trend.innerHTML = '';
+    arr.forEach((entry, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'trend-chip';
+      const isLatest = i === arr.length - 1;
+      chip.innerHTML = `<span class="trend-dot ${entry.color}"></span>${qLabel(entry.q)}` +
+        (isLatest ? `<span class="trend-prov ${entry.by === 'TEAM' ? 'team' : 'cp'}">${entry.by === 'TEAM' ? 'TEAM' : 'C+P'}</span>` : '');
+      chip.addEventListener('mouseenter', ev => showTooltip(ev.currentTarget, entry));
+      chip.addEventListener('mousemove', ev => positionTooltip(ev));
+      chip.addEventListener('mouseleave', hideTooltip);
+      trend.appendChild(chip);
+    });
+  }
+  function renderAllTrends() {
+    document.querySelectorAll('.pbox[data-num]').forEach(box => renderTrend(box, keyFor(box)));
+    document.querySelectorAll('.layer-strip').forEach(strip => renderTrend(strip, keyFor(strip)));
+  }
+
+  // ---------- Tooltip ----------
+  let tooltipEl = null;
+  function ensureTooltip() {
+    if (tooltipEl) return tooltipEl;
+    tooltipEl = document.createElement('div');
+    tooltipEl.className = 'pace-tooltip';
+    document.body.appendChild(tooltipEl);
+    return tooltipEl;
+  }
+  function showTooltip(chipEl, entry) {
+    const t = ensureTooltip();
+    const provLabel = entry.by === 'TEAM' ? 'Team final' : 'Cameron+Paul read';
+    const colorWord = entry.color.charAt(0).toUpperCase() + entry.color.slice(1);
+    t.innerHTML = `<div class="pt-head">${entry.q} — ${colorWord}</div><div class="pt-prov">${provLabel}</div>${entry.note ? `<div>${escapeHtml(entry.note)}</div>` : '<div style="color:#999;font-style:italic;">No note recorded.</div>'}`;
+    t.style.display = 'block';
+    const r = chipEl.getBoundingClientRect();
+    positionTooltipAt(r.left, r.bottom + 6);
+  }
+  function positionTooltip(ev) {
+    if (!tooltipEl || tooltipEl.style.display !== 'block') return;
+    positionTooltipAt(ev.clientX + 12, ev.clientY + 14);
+  }
+  function positionTooltipAt(x, y) {
+    if (!tooltipEl) return;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    tooltipEl.style.left = Math.min(x, vw - 280) + 'px';
+    tooltipEl.style.top = Math.min(y, vh - 100) + 'px';
+  }
+  function hideTooltip() {
+    if (tooltipEl) tooltipEl.style.display = 'none';
+  }
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // ---------- Grade change popover ----------
+  let popoverEl = null;
+  function closePopover() {
+    if (popoverEl) { popoverEl.remove(); popoverEl = null; }
+    document.removeEventListener('mousedown', popoverOutsideClick, true);
+  }
+  function popoverOutsideClick(ev) {
+    if (popoverEl && !popoverEl.contains(ev.target)) closePopover();
+  }
+  function openGradePopover(anchorEl, entry, box, key) {
+    closePopover();
+    const pop = document.createElement('div');
+    pop.className = 'grade-popover';
+    pop.innerHTML = `
+      <div class="gp-title">Why this grade?</div>
+      <textarea placeholder="What changed?"></textarea>
+      <div class="gp-toggle">
+        <button type="button" class="cp">C+P read</button>
+        <button type="button" class="team">Team final</button>
+      </div>
+      <div class="gp-actions">
+        <button type="button" class="cancel">Cancel</button>
+        <button type="button" class="save">Save</button>
+      </div>`;
+    document.body.appendChild(pop);
+    popoverEl = pop;
+
+    const ta = pop.querySelector('textarea');
+    ta.value = entry.note || '';
+    const cpBtn = pop.querySelector('.gp-toggle .cp');
+    const teamBtn = pop.querySelector('.gp-toggle .team');
+    const setToggle = by => {
+      cpBtn.classList.toggle('active', by !== 'TEAM');
+      teamBtn.classList.toggle('active', by === 'TEAM');
+    };
+    setToggle(entry.by);
+    cpBtn.addEventListener('click', () => setToggle('CP'));
+    teamBtn.addEventListener('click', () => setToggle('TEAM'));
+
+    pop.querySelector('.cancel').addEventListener('click', closePopover);
+    pop.querySelector('.save').addEventListener('click', () => {
+      entry.note = ta.value;
+      entry.by = teamBtn.classList.contains('active') ? 'TEAM' : 'CP';
+      renderTrend(box, key);
+      save();
+      closePopover();
+    });
+
+    // position near the anchor dot, clamped to viewport
+    const r = anchorEl.getBoundingClientRect();
+    const vw = window.innerWidth, vh = window.innerHeight;
+    let left = r.left - 140;
+    let top = r.bottom + 8;
+    left = Math.max(8, Math.min(left, vw - 296));
+    if (top + 220 > vh) top = Math.max(8, r.top - 228);
+    pop.style.left = left + 'px';
+    pop.style.top = top + 'px';
+
+    setTimeout(() => document.addEventListener('mousedown', popoverOutsideClick, true), 0);
+    ta.focus();
+  }
+
+  // ---------- Team-finalize quarter ----------
+  function teamFinalizeQuarter() {
+    const quarter = currentQuarter();
+    if (!confirm(`Mark every box + layer's ${quarter} grade as TEAM final? This overwrites the provenance badge on the current-quarter entries.`)) return;
+    document.querySelectorAll('.pbox[data-num]').forEach(box => {
+      const key = keyFor(box);
+      const cur = COLORS.find(c => box.classList.contains(c)) || 'gray';
+      const entry = findOrCreateEntry(key, quarter);
+      entry.color = cur;
+      entry.by = 'TEAM';
+      renderTrend(box, key);
+    });
+    document.querySelectorAll('.layer-strip').forEach(strip => {
+      const key = keyFor(strip);
+      const cur = COLORS.find(c => strip.classList.contains(c)) || 'gray';
+      const entry = findOrCreateEntry(key, quarter);
+      entry.color = cur;
+      entry.by = 'TEAM';
+      renderTrend(strip, key);
+    });
+    save();
+    setStatus('Team-finalized ' + quarter + ' · ' + clockNow());
   }
 
   // ---------- Save ----------
@@ -1173,6 +1552,27 @@
   }
 
   // ---------- Markdown export ----------
+  function buildHistoryMarkdown() {
+    const items = [...document.querySelectorAll('.pbox[data-num]')]
+      .sort((a, b) => +a.dataset.num - +b.dataset.num)
+      .map(b => ({ key: b.dataset.num, label: `Box ${b.dataset.num} — ${b.querySelector('.name').innerText}` }))
+      .concat([...document.querySelectorAll('.layer-strip')].map(l => ({
+        key: l.dataset.layer,
+        label: `${l.querySelector('.name').innerText} (${l.dataset.layer === 'strategic' ? 'Strategic Layer' : 'Foundation Layer'})`
+      })));
+    let out = '## Grade History\n';
+    items.forEach(({ key, label }) => {
+      const arr = HISTORY[key] || [];
+      if (!arr.length) return;
+      out += `\n### ${label}\n`;
+      arr.forEach(e => {
+        const provLabel = e.by === 'TEAM' ? 'Team final' : 'Cameron+Paul read';
+        out += `- **${e.q}** — ${e.color} (${provLabel})${e.note ? ': ' + e.note : ''}\n`;
+      });
+    });
+    return out;
+  }
+
   function copyMarkdown() {
     const quarter = document.querySelector('[data-id="quarter"]').innerText;
     const lastUpd = document.getElementById('lastUpdated').innerText;
@@ -1218,7 +1618,9 @@ ${document.querySelector('.improvement .ideas').innerText}
 ${document.querySelector('.qa-body').innerText}
 
 ## For Rob — Discussion
-${document.querySelector('.rob-card-body').innerText}`;
+${document.querySelector('.rob-card-body').innerText}
+
+${buildHistoryMarkdown()}`;
     navigator.clipboard.writeText(md).then(() => setStatus('Markdown copied to clipboard'));
   }
 
@@ -1271,6 +1673,7 @@ ${document.querySelector('.rob-card-body').innerText}`;
     } else {
       updateCounts();
       updateQATitle();
+      renderAllTrends();
       document.getElementById('lastUpdated').innerText = formatDate(new Date().toISOString());
     }
     updateLinkButtons();
