@@ -132,6 +132,24 @@
   }
   .qm-value:focus { background: #fffbe6; border-radius: 2px; }
 
+  /* ---------- HOW TO ---------- */
+  details.howto {
+    max-width: 1500px;
+    margin: 0 auto 12px;
+    background: white;
+    border: 1px solid var(--gray-2);
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 13px;
+  }
+  details.howto summary { font-weight: 700; cursor: pointer; color: var(--dark); }
+  .howto-body { margin-top: 8px; line-height: 1.6; }
+  .howto-body ul { margin-left: 18px; }
+  .howto-body li { margin-bottom: 6px; }
+  .howto-cp { background: #b7791f; color: #fff; border-radius: 4px; padding: 1px 7px; font-size: 11px; font-weight: 700; }
+  .howto-team { background: #2b6cb0; color: #fff; border-radius: 4px; padding: 1px 7px; font-size: 11px; font-weight: 700; }
+  @media print { details.howto { display: none; } }
+
   /* ---------- LEGEND ---------- */
   .legend {
     max-width: 1500px;
@@ -773,6 +791,20 @@
   </div>
 </div>
 
+<details class="howto">
+  <summary>❓ How to use this — grading, history, saving &amp; export (read once)</summary>
+  <div class="howto-body">
+    <ul>
+      <li><b>Grade a box:</b> click its colored dot to cycle Green → Yellow → Red. A small popover asks <i>why this grade?</i> — write one honest sentence and pick who's behind it: <span class="howto-cp">C+P</span> = Cameron+Paul working read · <span class="howto-team">TEAM</span> = full-team final call.</li>
+      <li><b>Trend chips:</b> the little quarter chips in each box are its grade history. Hover any chip to see that quarter's grade, who called it, and the reasoning.</li>
+      <li><b>At the QGR:</b> once the team has calibrated, hit <b>"✓ Team-finalize quarter"</b> in the toolbar — one click flips every current-quarter entry from C+P to TEAM.</li>
+      <li><b>Saving — read this part:</b> the page auto-saves to <b>this browser on this computer only</b>. A different Mac or browser starts from the published defaults. To carry state across devices (or back it up), use <b>"💾 Save to File…"</b> — it links a JSON file that updates as you edit; <b>"📂 Open from File…"</b> loads it anywhere.</li>
+      <li><b>Export to Albert:</b> <b>"Copy as Markdown"</b> copies the whole chart — grades, next steps, and the full grade history with notes. Paste it to Albert after a grading session.</li>
+      <li><b>Reset Defaults</b> wipes this browser's edits and returns to the published baseline. It does not touch a linked file.</li>
+    </ul>
+  </div>
+</details>
+
 <div class="legend">
   <span><span class="swatch" style="background: var(--green);"></span>Green — performing</span>
   <span><span class="swatch" style="background: var(--yellow);"></span>Yellow — soft / volatile</span>
@@ -1019,7 +1051,7 @@
 
 <script>
   const COLORS = ['green', 'yellow', 'red', 'gray'];
-  const SAVE_KEY = 'einstein-pace-v3'; // v4 2026-07-20 history feature — key value unchanged; old v3 saves lack history and merge safely (baked seed used as fallback)
+  const SAVE_KEY = 'einstein-pace-v3'; // v4.1 2026-07-20 how-to section — key value unchanged; old v3 saves lack history and merge safely (baked seed used as fallback)
   const DB_NAME = 'einstein-pace-db';
   const STORE = 'handles';
   const HANDLE_KEY = 'paceFile';
